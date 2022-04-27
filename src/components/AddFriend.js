@@ -1,8 +1,14 @@
 import React, {useState} from 'react';
 import axios from 'axios'
 import {useHistory} from 'react-router-dom'
+import axiosWithAuth from '../helpers/AxiosWAuth';
 
-
+/* 
+There are a number of ways to create a Protected Route.
+1. you can create an if statement at the top of the component that will immediately redirect you if the token doesn't exist.
+2. you can write similar logic in the JSX as a ternary (more or less like this...) -- does the token exist in localStorage? if so then display the following JSX: if not then redirect back to '/login'
+3. you can also build a separate helper component that is stateless. Probably preferred--because it is infinitely resusable. You'll see two different forms applied on the App component. In the end it will likely require less typing after a couple dozen components that are all protected.
+*/
 function AddFriend() {
     const [form, setForm] = useState({
         name: '',
@@ -10,9 +16,9 @@ function AddFriend() {
     })
     const {push} = useHistory()
 
-    if(!window.localStorage.getItem('token')){
-        push('/login')
-    }
+    // if(!window.localStorage.getItem('token')){
+    //     push('/login')
+    // }
 
 
     
@@ -30,9 +36,12 @@ function AddFriend() {
             name: form.name,
             email: form.email
         }
-        axios.post('http://localhost:9000/api/friends',newFriend, {
-            headers: { authorization:localStorage.getItem('token')}
-        } )
+        axiosWithAuth().post('http://localhost:9000/api/friends', newFriend)
+        /* TWO WAYS TO DO THIS. ABOVE AND BELOW. Above is much more reuseable...*/
+        
+        // axios.post('http://localhost:9000/api/friends',newFriend, {
+        //     headers: { authorization:localStorage.getItem('token')}
+        // } )
         .then(res => {
             setForm({
                 name: '',

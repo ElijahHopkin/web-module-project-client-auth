@@ -5,6 +5,8 @@ import Login from './components/login';
 import FriendsList from './components/FriendsList';
 import AddFriend from './components/AddFriend';
 import Logout from './components/Logout'
+import ProtectedRoute from './helpers/ProtectedRouteChrisAdams'
+import PrivateRoute from './helpers/PrivateRouteBloomTech';
 
 function App() {
   return (
@@ -22,9 +24,14 @@ function App() {
       <Switch>
         <Route exact path = '/login' component = {Login} />
         <Route exact path = '/' component = {Login} />
-        <Route exact path = '/friends' component = {FriendsList}/>
-        <Route exact path = '/friends/add' component = {AddFriend}/>
+        <ProtectedRoute exact path = '/friends'>
+          <FriendsList/>
+        </ProtectedRoute>
+        <PrivateRoute exact path = '/friends/add' component = {AddFriend}/>
         <Route exact path = '/logout'  component = {Logout}/>
+        {/* <ProtectedRoute path = '/friends'>
+        <FriendsList friends = {friends}/>
+        </ProtectedRoute> */}
       </Switch>
     </div>
     </Router>
